@@ -1,0 +1,33 @@
+name: Deploy Surge Website   
+on: [push]
+
+jobs:
+       build:                           
+           runs-on: ubuntu-latest 
+           name: Deploying to surge 
+           steps:    
+           - uses: actions/checkout@v2 
+           - name: Install Node.js
+             uses: actions/setup-node@v2-beta
+             with: 
+               node-version: 20.10 
+               
+           - name: install dependencies                              
+             run: npm install
+           - name: Update Build number
+             env:
+               RUN_NUMBER: ${{ github.run_number }}
+             run: echo "REACT_APP_VERSION=${{ github.run_number }}" >> .env \
+               && echo "REACT_APP_API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env
+             
+           - name: .env file
+             run: cat .env
+             
+           - name: Build App
+             run: npm run build
+             
+           - name: Install Surge
+             run: npm install --global surge
+             
+           - name: Run surge
+             run: surge ./build daily-diction.surge.sh --token ${{ secrets.SURGE_TOKEN }}
