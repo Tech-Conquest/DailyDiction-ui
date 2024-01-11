@@ -1,0 +1,103 @@
+@import url("./animation.css");
+
+.wrapper {
+ 
+ width: 100%;
+ height: 100vh;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.right-card,
+.left-card {
+
+ width: 300px;
+ height: 400px;
+ display: flex;
+}
+
+.card-outer {
+
+ display: flex;
+ perspective: 700px;
+ animation: rotate-card .5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+}
+
+.right-card {
+
+ transform: translateX(150px);
+ animation: expand-right .5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+ animation-delay: .8s;
+
+}
+
+.left-card {
+
+ transform: translateX(-150px);
+ animation: expand-left .5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+ animation-delay: .8s;
+}
+
+.list-wrapper {
+
+ display: flex;
+ justify-content: space-around;
+ flex-direction: column;
+ height: 80%;
+ padding: 10px;
+
+}
+
+.list-skeleton {
+
+ width: 80%;
+ height: 20px;
+ border-radius: 10px;
+ background: #d8d6d6;
+
+}
+
+.list-1 {
+
+ opacity: 0;
+ transform: translateY(20px);
+ animation: fadeInUp 0.5s forwards;
+ animation-delay: 2s;
+}
+
+.list-1:first-child {
+
+ animation: fadeInUpLast 0.5s forwards 2s;
+}
+
+.content {
+
+ visibility: hidden;
+ transform: translateY(20px);
+ opacity: 0;
+ animation: showAfterView 1s forwards 3s;
+}
+
+
+.btn-grad {
+
+ background-image: linear-gradient(to right, #642B73 0%, #C6426E 51%, #642B73 100%);
+ padding: 15px 28px;
+ text-align: center;
+ text-transform: uppercase;
+ transition: 0.5s;
+ background-size: 200% auto;
+ color: white;
+ box-shadow: 0 0 20px #eee;
+ border-radius: 10px;
+ display: flex;
+}
+
+.btn-grad:hover {
+
+ background-position: right center;
+ color: #fff;
+ text-decoration: none;
+}

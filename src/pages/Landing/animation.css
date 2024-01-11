@@ -1,0 +1,66 @@
+@keyframes rotate-card {
+ 0% {
+  transform: rotate3d(0, 0, 0, 0deg);
+
+ }
+
+ 100% {
+  transform: rotate3d(2, 5, 1, 45deg);
+
+ }
+}
+
+@keyframes expand-right {
+ 0% {
+  transform: translateX(100px);
+ }
+
+ 100% {
+  transform: translateX(0px);
+ }
+}
+
+@keyframes expand-left {
+ 0% {
+  transform: translateX(-100px);
+ }
+
+ 100% {
+  transform: translateX(0px);
+  margin-left: 10px;
+ }
+}
+
+
+@keyframes fadeInUp {
+ to {
+  opacity: 1;
+  transform: translateY(0);
+ }
+}
+
+@keyframes highlight {
+ 100% {
+  background-color: rgb(88, 203, 132);
+  transform: scale3d(1.5, 1.5, 1.5) !important;
+ }
+}
+
+@keyframes fadeInUpLast {
+ to {
+  opacity: 1;
+  transform: translateY(0) scale3d(1.3, 1.5, 1.5) translateX(20px);
+  background-color: rgb(76, 208, 102);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+ }
+}
+
+@keyframes showAfterView {
+ to {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+
+ }
+}
