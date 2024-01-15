@@ -1,0 +1,18 @@
+.add-new-img{
+
+ width: 400px;
+ height: 400px;
+ animation: jump 1.5s linear infinite alternate-reverse;
+}
+
+@keyframes jump {
+  0%{
+   transform: translateY(-30px);
+  }
+  50%{
+   transform: translateY(-20px);
+  }
+  100%{
+   transform: translateY(0px);
+  }
+}
