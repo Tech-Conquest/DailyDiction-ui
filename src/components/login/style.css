@@ -1,0 +1,43 @@
+.login-form-btn {
+
+ background-image: linear-gradient(to right, #FF5722 0%, #FFC107 51%, #FF5722 100%);
+ padding: 15px 28px;
+ text-align: center;
+ text-transform: uppercase;
+ transition: 0.5s;
+ background-size: 200% auto;
+ color: white;
+ border-radius: 10px;
+ display: flex;
+}
+
+.login-form-btn:hover {
+
+ background-position: right center;
+ color: #fff;
+ text-decoration: none;
+}
+
+.login-form::before{
+ content: "";
+}
+.switch {
+
+ width: 80px;
+ height: 80px;
+ position: absolute;
+ border-radius: 100%;
+ background: #FF5722;
+ right: -13px;
+ top: -25px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ color: #fff;
+ cursor: pointer;
+ box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+ transition: transform .2s linear;
+}
+.switch:hover{
+  transform: scale(.7);
+}

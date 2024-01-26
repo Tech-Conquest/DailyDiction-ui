@@ -2,14 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-.w-700{
+:root {
+
+  --primary-bg: #1a1a29;
+}
+
+body {
+  background: var(--primary-bg);
+}
+
+.w-700 {
   width: 700px;
 }
 
-.h-400{
+.h-400 {
   height: 400px;
 }
 
-.he-90{
+.he-90 {
   height: 90vh;
 }

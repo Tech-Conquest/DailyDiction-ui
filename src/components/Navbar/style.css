@@ -1,0 +1,20 @@
+.login-btn-grad {
+
+ background-image: linear-gradient(to right, #FF5722 0%, #FFC107 51%, #FF5722 100%);
+ padding: 2px 20px;
+ text-align: center;
+ text-transform: uppercase;
+ transition: 0.5s;
+ background-size: 200% auto;
+ color: white;
+ box-shadow: 0 0 20px #121111;
+ border-radius: 10px;
+ display: flex;
+}
+
+.login-btn-grad:hover {
+
+ background-position: right center;
+ color: #fff;
+ text-decoration: none;
+}

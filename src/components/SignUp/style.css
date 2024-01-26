@@ -1,0 +1,36 @@
+.login-form-btn {
+
+ background-image: linear-gradient(to right, #FF5722 0%, #FFC107 51%, #FF5722 100%);
+ padding: 15px 28px;
+ text-align: center;
+ text-transform: uppercase;
+ transition: 0.5s;
+ background-size: 200% auto;
+ color: white;
+ border-radius: 10px;
+ display: flex;
+}
+
+.login-form-btn:hover {
+
+ background-position: right center;
+ color: #fff;
+ text-decoration: none;
+}
+
+.login-form::before{
+ content: "";
+}
+
+.sign-up-form{
+ transform: scale(0);
+ animation: shrink .5s ease-in-out forwards;
+}
+@keyframes shrink {
+ from {
+   transform: scale(0);
+ }
+ to {
+   transform: scale(1);
+ }
+}
