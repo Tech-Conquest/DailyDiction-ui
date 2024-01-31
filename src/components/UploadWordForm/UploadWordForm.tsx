@@ -110,7 +110,7 @@ const UploadNewWord = () => {
           setError("No meanings found for the given word");
         }
       } catch (error) {
-        setError("Word not found, please enter different word")
+        setError("Word not found, please enter different word");
       }
 
       setLoading(false);
@@ -160,6 +160,7 @@ const UploadNewWord = () => {
               <CSVUploader
                 setJson={setCSVData}
                 validateHeaderList={["word"]}
+                templatePath="/assets/words_template.csv"
                 validateCSV={true}
                 setError={setError}
               />

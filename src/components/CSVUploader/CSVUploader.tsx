@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import DescriptionIcon from "@mui/icons-material/Description";
 import Papa from "papaparse";
 import Spinner from "../../pages/Landing/MicroComponents/Spinner";
 import { IParsedJSON } from "../../core/interface/ParsedJson";
@@ -6,13 +7,15 @@ import { IParsedJSON } from "../../core/interface/ParsedJson";
 const CSVUploader = ({
   validateHeaderList,
   validateCSV,
+  templatePath,
   setJson,
-  setError
+  setError,
 }: {
   validateHeaderList?: (keyof IParsedJSON)[];
   validateCSV?: boolean;
-  setJson: (data:IParsedJSON[]) => void
-  setError:(error:string) => void
+  templatePath?: string;
+  setJson: (data: IParsedJSON[]) => void;
+  setError: (error: string) => void;
 }) => {
   const [isParsing, setIsParsing] = useState<Boolean>(false);
 
@@ -22,26 +25,26 @@ const CSVUploader = ({
     if (file) {
       Papa.parse(file, {
         complete: (result: any): any => {
-
           let parsedJsonData: IParsedJSON[] = result.data;
           let isValidJson = true;
 
           if (validateCSV) {
-            isValidJson = validateMandatedField(parsedJsonData, validateHeaderList || []);
+            isValidJson = validateMandatedField(
+              parsedJsonData,
+              validateHeaderList || []
+            );
           }
 
           if (isValidJson) {
-           setJson(parsedJsonData)
+            setJson(parsedJsonData);
+          } else {
+            setError("Please upload correct csv file !!");
           }
-          else{
-           setError("Please upload correct csv file !!")
-          }
-
         },
         header: true,
       });
     }
-    setIsParsing(false)
+    setIsParsing(false);
   };
 
   const validateMandatedField = (
@@ -60,6 +63,11 @@ const CSVUploader = ({
     return true;
   };
 
+  const downloadTemplate = () => {
+    const fileUrl = templatePath;
+    window.open(fileUrl, "_blank");
+  };
+
   return (
     <>
       {isParsing ? (
@@ -68,15 +76,21 @@ const CSVUploader = ({
           <p className="mt-1">Parsing csv...</p>
         </div>
       ) : (
-        <input
-          type="file"
-          accept=".csv"
-          className="file-input file-input-bordered w-full max-w-xs"
-          onChange={handleCsvUpload}
-        />
+        <>
+          <input
+            type="file"
+            accept=".csv"
+            className="file-input file-input-bordered max-w-72"
+            onChange={handleCsvUpload}
+          />
+          <DescriptionIcon
+            style={{ fontSize: 32 }}
+            onClick={downloadTemplate}
+          ></DescriptionIcon>
+        </>
       )}
     </>
   );
-}
+};
 
 export default CSVUploader;
