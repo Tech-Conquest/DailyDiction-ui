@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../../core/context/context";
 import { authenticateUser } from "../../core/api/utils";
@@ -10,7 +10,9 @@ const Login = () => {
   const [error, setError] = useState<string>("");
   const globalContex: any = useContext(GlobalContext);
   const navigate = useNavigate();
-  const loginUser = async () => {
+
+  const loginUser = async (event:any) => {
+    event.preventDefault();
     setError("");
     let authenticationResult = await authenticateUser({
       username: userName,
@@ -34,39 +36,41 @@ const Login = () => {
       >
         Sign up
       </div>
-      <div className="card-body text-center justify-center">
-        <h2 className="card-title justify-center">Login</h2>
-        {error ? <p className="text-red-800">{error}</p> : null}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">UserName</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter username"
-            className="input input-bordered"
-            onChange={(event) => setUserName(event.target.value)}
-            required
-          />
+      <form onSubmit={loginUser}>
+        <div className="card-body text-center justify-center">
+          <h2 className="card-title justify-center">Login</h2>
+          {error ? <p className="text-red-800">{error}</p> : null}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">UserName</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter username"
+              className="input input-bordered"
+              onChange={(event) => setUserName(event.target.value)}
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Password</span>
+            </label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="input input-bordered"
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
+          <div className="card-actions justify-center">
+            <button className="btn login-form-btn" type="submit">
+              Sign In
+            </button>
+          </div>
         </div>
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Password</span>
-          </label>
-          <input
-            type="password"
-            placeholder="Enter password"
-            className="input input-bordered"
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-        <div className="card-actions justify-center">
-          <button className="btn login-form-btn" onClick={loginUser}>
-            Sign In
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   );
 };
