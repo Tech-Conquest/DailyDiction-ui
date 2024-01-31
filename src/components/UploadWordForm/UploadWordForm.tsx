@@ -1,64 +1,121 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { bulkUploadWords, getWordDetails } from "../../core/api/utils";
+import {
+  bulkUploadWords,
+  getWordDetails,
+  uploadNewWord,
+} from "../../core/api/utils";
 import MeaningModal from "../Modal/MeaningModal";
 import CustomBtn from "../button/CustomBtn";
 import CSVUploader from "../CSVUploader/CSVUploader";
 import { IParsedJSON } from "../../core/interface/ParsedJson";
-import Spinner from "../../pages/Landing/MicroComponents/Spinner";
+import { EStatusCode } from "../../core/enums/response.enum";
+import { IMeaningList } from "../../core/interface/MeaningList";
+import { IUploadWord } from "../../core/interface/uploadWord";
+
+interface WordDetail {
+  partOfSpeech: string;
+  Definition: string;
+}
 
 const UploadNewWord = () => {
-
   const [word, setWord] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [csvData, setCSVData] = useState<IParsedJSON[]>();
   const [uploading, setUploading] = useState<Boolean>(false);
-  const [success,setSuccess] = useState<string>("")
+  const [success, setSuccess] = useState<string>("");
+  const [wordDetails, setWordDetails] = useState<WordDetail[]>([]);
+  const [selectedMeaning, setSelectedMeaning] = useState<IMeaningList[] | []>(
+    []
+  );
 
   useEffect(() => {
     if (csvData?.length) {
       setError("");
-      setSuccess("")
+      setSuccess("");
       setUploading(true);
-      uploadWords(csvData)
+      uploadWords(csvData);
     }
   }, [csvData]);
 
-  const uploadWords = async (csvData:IParsedJSON[]) => {
-    const isUploaded = await bulkUploadWords(csvData)
-    if(isUploaded.status === 200){
-      setSuccess("Words uploaded successfully !!")
+  useEffect(() => {
+    if (selectedMeaning.length) {
+      setError("");
+      setSuccess("");
+      let payload = {
+        speechList: selectedMeaning,
+        word: word,
+      };
+      uploadWord(payload);
     }
-    else if(isUploaded.status === 400){
-        setError("Please upload correct csv file")
-    }
-    else{
-        setError("Something went wrong please try again")
-    }
-    setUploading(false);
+  }, [selectedMeaning]);
 
-  }
+  const uploadWords = async (csvData: IParsedJSON[]) => {
+    try {
+      const isUploaded = await bulkUploadWords(csvData);
+      if (isUploaded.status === EStatusCode.SUCCESS) {
+        setSuccess("Words uploaded successfully !!");
+      } else if (isUploaded.status === EStatusCode.BAD_REQUEST) {
+        setError("Please upload correct CSV file");
+      } else {
+        setError("Something went wrong. Please try again");
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const uploadWord = async (uploadWordData: IUploadWord) => {
+    try {
+      const isUploaded = await uploadNewWord(uploadWordData);
+      if (isUploaded.status === EStatusCode.SUCCESS) {
+        setSuccess("Word uploaded successfully !!");
+      } else if (isUploaded.status === EStatusCode.BAD_REQUEST) {
+        setError("Please add speech before upload");
+      } else {
+        setError("Something went wrong. Please try again");
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again");
+    }
+    setSelectedMeaning([]);
+  };
 
   const getWordDetail = async () => {
-    setSuccess("")
-    if (word.length) {
+    setError("");
+    setSuccess("");
+    const meaningList: WordDetail[] = [];
 
+    if (word.length) {
       setLoading(true);
       setError("");
-      setSuccess("")
-      const getWordData = await getWordDetails(word);
-      const modal = document.getElementById(
-        "meaning-modal"
-      ) as HTMLDialogElement | null;
+      try {
+        const getWordData = await getWordDetails(word);
 
-      if (getWordData.length) {
-        modal?.showModal();
+        const modal = document.getElementById(
+          "meaning-modal"
+        ) as HTMLDialogElement | null;
+
+        if (getWordData.length) {
+          getWordData.forEach((data: any) => {
+            meaningList.push(data.meanings);
+          });
+          setWordDetails(meaningList.flat());
+          modal?.showModal();
+        } else {
+          setError("No meanings found for the given word");
+        }
+      } catch (error) {
+        setError("Word not found, please enter different word")
       }
 
       setLoading(false);
     } else {
-      setError("Please Enter the word");
+      setError("Please enter the word");
     }
   };
 
@@ -69,17 +126,13 @@ const UploadNewWord = () => {
     <div className="card-body">
       {uploading ? (
         <div className="flex flex-col items-center ">
-          <p>Uploading data please wait ...</p>
-         <progress className="progress w-56 mt-3"></progress>
+          <p>Uploading data, please wait...</p>
+          <progress className="progress w-56 mt-3"></progress>
         </div>
       ) : (
         <>
-          {error.length ? (
-            <p className="text-red-500 text-center">{error}</p>
-          ) : null}
-          {success.length ? (
-            <p className="text-green-500 text-center">{success}</p>
-          ) : null}
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          {success && <p className="text-green-500 text-center">{success}</p>}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Enter a Word</span>
@@ -96,8 +149,8 @@ const UploadNewWord = () => {
             <CustomBtn
               loading={loading}
               callBack={getWordDetail}
-              loadingText={"Fetching Details..."}
-              btnText={"Get Details"}
+              loadingText="Fetching Details..."
+              btnText="Get Details"
             />
           </div>
           <div className="divider">OR</div>
@@ -112,11 +165,15 @@ const UploadNewWord = () => {
               />
             </div>
           </div>
-          <MeaningModal />
+          <MeaningModal
+            wordDetails={wordDetails}
+            word={word}
+            setSelectedMeaning={setSelectedMeaning}
+          />
         </>
       )}
     </div>
   );
-}
+};
 
 export default UploadNewWord;

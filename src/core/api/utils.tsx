@@ -1,8 +1,9 @@
 import { EStatusCode } from "../enums/response.enum";
 import { IParsedJSON } from "../interface/ParsedJson";
 import { IUser } from "../interface/User";
+import { IUploadWord } from "../interface/uploadWord";
 import { apiInstance, dailyDictionServerInstance } from "./api";
-import { BULK_UPLOAD, USER_LOGIN, USER_SIGNUP, WORD_ENTRIES } from "./endpoint";
+import { BULK_UPLOAD, UPLOAD_WORD, USER_LOGIN, USER_SIGNUP, WORDS, WORD_ENTRIES } from "./endpoint";
 
 export const getWordDetails = async (word: string) => {
   const wordData = await apiInstance.get(`${WORD_ENTRIES}${word}`);
@@ -16,6 +17,21 @@ export const bulkUploadWords = async (bulkUploadWords: IParsedJSON[]) => {
     bulkUploadWords
   );
   return isUploaded;
+};
+
+export const uploadNewWord = async (uploadWordData: IUploadWord) => {
+  const isUploaded = await dailyDictionServerInstance.post(
+    `${UPLOAD_WORD}`,
+    uploadWordData
+  );
+  return isUploaded;
+};
+
+export const getTodaysWords = async () => {
+  const todaysWords = await dailyDictionServerInstance.get(
+    `${WORDS}`
+  );
+  return todaysWords;
 };
 
 export const authenticateUser = async (loginDetails: IUser) => {
