@@ -7,7 +7,7 @@ import WordMeaning from "../../components/wordMeaning/wordMeaning";
 const Learn = () => {
 
   const [todaysWords, setTodaysWords] = useState([]);
-  const [error, setError] = useState<Boolean>(false);
+  // const [error, setError] = useState<Boolean>(false);
   const [wordList, setWordList] = useState<string[]>([]);
   const [selectedWordDetails, setSelectedWordDetails] = useState();
   const [selectedWord, setSelectedWord] = useState<string>("");
@@ -27,7 +27,7 @@ const Learn = () => {
         setSelectedWord(wordList[0]);
       }
     } catch (error) {
-      setError(true);
+      // setError(true);
     }
   };
 

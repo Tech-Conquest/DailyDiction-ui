@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../../core/context/context";
 import { authenticateUser } from "../../core/api/utils";
