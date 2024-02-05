@@ -3,6 +3,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import Papa from "papaparse";
 import Spinner from "../../pages/Landing/MicroComponents/Spinner";
 import { IParsedJSON } from "../../core/interface/ParsedJson";
+import CustomInfoIcon from "../CustomToolTip/CustomInfoIcon";
 
 const CSVUploader = ({
   validateHeaderList,
@@ -83,10 +84,12 @@ const CSVUploader = ({
             className="file-input file-input-bordered max-w-72"
             onChange={handleCsvUpload}
           />
-          <DescriptionIcon
-            style={{ fontSize: 32 }}
-            onClick={downloadTemplate}
-          ></DescriptionIcon>
+          <CustomInfoIcon message="Download template for bulk upload">
+            <DescriptionIcon
+              style={{ fontSize: 32 }}
+              onClick={downloadTemplate}
+            ></DescriptionIcon>
+          </CustomInfoIcon>
         </>
       )}
     </>
