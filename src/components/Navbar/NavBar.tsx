@@ -21,6 +21,9 @@ const NavBar = () => {
               <Link to="/admin/upload" className="ml-5">
                 Upload
               </Link>
+              <Link to="/admin/review" className="ml-5">
+                Review
+              </Link>
               <Link to="/learn" className="ml-5">
                 Learn
               </Link>

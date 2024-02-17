@@ -3,7 +3,6 @@ import React from "react";
 import { MdOutlineThumbDown, MdOutlineThumbUp } from "react-icons/md";
 
 import Audio from "../audio/Audio";
-import { IMeaningList } from "../../core/interface/MeaningList";
 import Chip from "../chip/Chip";
 
 const WordMeaning = ({ wordDetails }: any) => {
@@ -17,7 +16,7 @@ const WordMeaning = ({ wordDetails }: any) => {
       </div>
       {wordDetails?.speechList?.length ? (
         <>
-          {wordDetails.speechList.map((speech: IMeaningList, index: number) => {
+          {wordDetails.speechList.map((speech: any, index: number) => {
             return (
               <div className="flex flex-col mt-4">
                 <div className="flex">

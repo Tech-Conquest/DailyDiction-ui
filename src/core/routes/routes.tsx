@@ -4,6 +4,7 @@ import Landing from "../../pages/Landing/Landing";
 import UploadWord from "../../pages/Upload/UploadNewWord";
 import { PrivateRoute } from "./PrivateRoute";
 import Learn from "../../pages/Learn/Learn";
+import ReviewWords from "../../pages/Review/ReviewWords";
 
 function AppRoutes() {
   return (
@@ -14,6 +15,14 @@ function AppRoutes() {
         element={
           <PrivateRoute userRole="Admin">
             <UploadWord />
+          </PrivateRoute>
+        }
+      ></Route>
+      <Route
+        path="/admin/review"
+        element={
+          <PrivateRoute userRole="Admin">
+            <ReviewWords />
           </PrivateRoute>
         }
       ></Route>

@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from "react";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Papa from "papaparse";
 import Spinner from "../../pages/Landing/MicroComponents/Spinner";
-import { IParsedJSON } from "../../core/interface/ParsedJson";
 import CustomInfoIcon from "../CustomToolTip/CustomInfoIcon";
 
 const CSVUploader = ({
@@ -12,10 +11,10 @@ const CSVUploader = ({
   setJson,
   setError,
 }: {
-  validateHeaderList?: (keyof IParsedJSON)[];
+  validateHeaderList?: string[];
   validateCSV?: boolean;
   templatePath?: string;
-  setJson: (data: IParsedJSON[]) => void;
+  setJson: (data: any) => void;
   setError: (error: string) => void;
 }) => {
   const [isParsing, setIsParsing] = useState<Boolean>(false);
@@ -26,7 +25,7 @@ const CSVUploader = ({
     if (file) {
       Papa.parse(file, {
         complete: (result: any): any => {
-          let parsedJsonData: IParsedJSON[] = result.data;
+          let parsedJsonData: any= result.data;
           let isValidJson = true;
 
           if (validateCSV) {
@@ -49,8 +48,8 @@ const CSVUploader = ({
   };
 
   const validateMandatedField = (
-    parsedData: IParsedJSON[],
-    validateHeaderList: (keyof IParsedJSON)[]
+    parsedData: any,
+    validateHeaderList: any
   ): boolean => {
     if (validateHeaderList.length) {
       for (const parse of parsedData) {

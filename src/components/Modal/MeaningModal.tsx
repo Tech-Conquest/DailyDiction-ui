@@ -1,51 +1,51 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Audio from "../audio/Audio";
-import { EBtnState } from "../../core/enums/btnState.enum";
-import { IMeaningList } from "../../core/interface/MeaningList";
+import { ESpeechSelection } from "../../core/enums/btnState.enum";
+import { IPartsOfSpeech } from "../../core/interface/Words";
 
 interface MeaningModalProps {
   word: string;
   wordDetails: any[];
-  setSelectedMeaning: Dispatch<SetStateAction<IMeaningList[]>>;
+  setSelectedPOS: Dispatch<SetStateAction<IPartsOfSpeech[]>>;
 }
 
 const MeaningModal = ({
   word,
   wordDetails,
-  setSelectedMeaning,
+  setSelectedPOS,
 }: MeaningModalProps) => {
 
-  const [meaningList, setMeaningList] = useState<IMeaningList[]>([]);
+  const [posList, setPOSList] = useState<any[]>([]);
   const buttonRefs = useRef<HTMLButtonElement[]>([]);
 
-  const handleMeaningList = (index: number, wordDetailsList: any) => {
+  const handleMeaningList = (index: number, wordDetailsList: IPartsOfSpeech) => {
     const buttonText = buttonRefs.current[index].innerText;
 
-    if (buttonText === EBtnState.ADD_SPEECH) {
-      const tempMeaningData: IMeaningList = {
+    if (buttonText === ESpeechSelection.ADD_SPEECH) {
+      const tempMeaningData: any = {
         partOfSpeech: wordDetailsList.partOfSpeech,
         Definition: wordDetailsList.definitions[0].definition,
       };
 
-      const updatedMeaningList = [...meaningList];
+      const updatedMeaningList = [...posList];
       updatedMeaningList.splice(index, 0, tempMeaningData);
-      setMeaningList(updatedMeaningList);
+      setPOSList(updatedMeaningList);
     } else {
-      const updatedMeaningList = [...meaningList];
+      const updatedMeaningList = [...posList];
       updatedMeaningList.splice(index, 1);
-      setMeaningList(updatedMeaningList);
+      setPOSList(updatedMeaningList);
     }
 
     buttonRefs.current[index].innerText =
-      buttonRefs.current[index].innerText === EBtnState.ADD_SPEECH
-        ? EBtnState.REMOVE_SPEECH
-        : EBtnState.ADD_SPEECH;
+      buttonRefs.current[index].innerText === ESpeechSelection.ADD_SPEECH
+        ? ESpeechSelection.REMOVE_SPEECH
+        : ESpeechSelection.ADD_SPEECH;
   };
 
   const resetButtonRefs = () => {
     buttonRefs.current.forEach((buttonRef) => {
       if (buttonRef) {
-        buttonRef.textContent = EBtnState.ADD_SPEECH;
+        buttonRef.textContent = ESpeechSelection.ADD_SPEECH;
       }
     });
   };
@@ -86,7 +86,7 @@ const MeaningModal = ({
                     }
                     onClick={() => handleMeaningList(index, wordDetailsList)}
                   >
-                    {EBtnState.ADD_SPEECH}
+                    {ESpeechSelection.ADD_SPEECH}
                   </button>
                 </div>
               </div>
@@ -98,8 +98,8 @@ const MeaningModal = ({
             <button
               className="btn bg-slate-700 text-white hover:bg-slate-700"
               onClick={() => {
-                setSelectedMeaning(meaningList);
-                setMeaningList([])
+                setSelectedPOS(posList);
+                setPOSList([])
                 resetButtonRefs()
               }}
             >

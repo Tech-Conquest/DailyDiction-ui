@@ -1,33 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ChangeEvent, useEffect, useState } from "react";
-import {
-  bulkUploadWords,
-  getWordDetails,
-  uploadNewWord,
-} from "../../core/api/utils";
+import { getWordDetails, uploadWords } from "../../core/api/utils";
 import MeaningModal from "../Modal/MeaningModal";
 import CustomBtn from "../button/CustomBtn";
 import CSVUploader from "../CSVUploader/CSVUploader";
-import { IParsedJSON } from "../../core/interface/ParsedJson";
 import { EStatusCode } from "../../core/enums/response.enum";
-import { IMeaningList } from "../../core/interface/MeaningList";
-import { IUploadWord } from "../../core/interface/uploadWord";
+import { IMeaning, IPartsOfSpeech, IWord } from "../../core/interface/Words";
 
-interface WordDetail {
-  partOfSpeech: string;
-  Definition: string;
-}
 
 const UploadNewWord = () => {
   const [word, setWord] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [csvData, setCSVData] = useState<IParsedJSON[]>();
+  const [csvData, setCSVData] = useState<any[]>();
   const [uploading, setUploading] = useState<Boolean>(false);
   const [success, setSuccess] = useState<string>("");
-  const [wordDetails, setWordDetails] = useState<WordDetail[]>([]);
-  const [selectedMeaning, setSelectedMeaning] = useState<IMeaningList[] | []>(
+  const [wordDetails, setWordDetails] = useState<IPartsOfSpeech[]>([]);
+  const [selectedPOS, setSelectedPOS] = useState<any[] | []>(
     []
   );
 
@@ -36,25 +26,33 @@ const UploadNewWord = () => {
       setError("");
       setSuccess("");
       setUploading(true);
-      uploadWords(csvData);
+      handleUploadWords(csvData);
     }
   }, [csvData]);
 
   useEffect(() => {
-    if (selectedMeaning.length) {
+    if (selectedPOS.length) {
       setError("");
       setSuccess("");
-      let payload = {
-        speechList: selectedMeaning,
+      let meanings: IMeaning[] = []
+      let payload: IWord = {
+
+        meanings:[
+          {
+            partOfSpeech: selectedPOS,
+            definition: selectedPOS[0].definitions[0].definition,
+            phonetics: selectedPOS[0].phonetics[0].text,
+          }
+        ],
         word: word,
       };
-      uploadWord(payload);
+      handleUploadWords([payload]);
     }
-  }, [selectedMeaning]);
+  }, [selectedPOS]);
 
-  const uploadWords = async (csvData: IParsedJSON[]) => {
+  const handleUploadWords = async (words: IWord[]) => {
     try {
-      const isUploaded = await bulkUploadWords(csvData);
+      const isUploaded = await uploadWords(words);
       if (isUploaded.status === EStatusCode.SUCCESS) {
         setSuccess("Words uploaded successfully !!");
       } else if (isUploaded.status === EStatusCode.BAD_REQUEST) {
@@ -69,40 +67,27 @@ const UploadNewWord = () => {
     }
   };
 
-  const uploadWord = async (uploadWordData: IUploadWord) => {
-    try {
-      const isUploaded = await uploadNewWord(uploadWordData);
-      if (isUploaded.status === EStatusCode.SUCCESS) {
-        setSuccess("Word uploaded successfully !!");
-      } else if (isUploaded.status === EStatusCode.BAD_REQUEST) {
-        setError("Please add speech before upload");
-      } else {
-        setError("Something went wrong. Please try again");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again");
-    }
-    setSelectedMeaning([]);
-  };
-
   const getWordDetail = async () => {
     setError("");
     setSuccess("");
-    const meaningList: WordDetail[] = [];
+    const meaningList: IPartsOfSpeech[] = [];
 
     if (word.length) {
       setLoading(true);
       setError("");
       try {
-        const getWordData = await getWordDetails(word);
+        const wordsAPIData = await getWordDetails(word);
+        console.log(wordsAPIData);
 
         const modal = document.getElementById(
           "meaning-modal"
         ) as HTMLDialogElement | null;
 
-        if (getWordData.length) {
-          getWordData.forEach((data: any) => {
-            meaningList.push(data.meanings);
+        if (wordsAPIData.length) {
+          wordsAPIData.forEach((data: any) => {
+            data.meanings.forEach((pos: IPartsOfSpeech) => {
+              meaningList.push(pos);
+            });
           });
           setWordDetails(meaningList.flat());
           modal?.showModal();
@@ -121,6 +106,10 @@ const UploadNewWord = () => {
 
   const getWordInput = (event: ChangeEvent<HTMLInputElement>) =>
     setWord(event.target.value);
+
+  const handleCsvUpload = (data: any) => {
+    console.log(data);
+  }
 
   return (
     <div className="card-body">
@@ -158,7 +147,7 @@ const UploadNewWord = () => {
             <label className="label-text">Bulk Upload</label>
             <div className="mt-4">
               <CSVUploader
-                setJson={setCSVData}
+                setJson={handleCsvUpload}
                 validateHeaderList={["word"]}
                 templatePath="/assets/words_template.csv"
                 validateCSV={true}
@@ -169,7 +158,7 @@ const UploadNewWord = () => {
           <MeaningModal
             wordDetails={wordDetails}
             word={word}
-            setSelectedMeaning={setSelectedMeaning}
+            setSelectedPOS={setSelectedPOS}
           />
         </>
       )}
