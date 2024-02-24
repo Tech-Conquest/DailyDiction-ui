@@ -193,7 +193,18 @@
 .list-active {
  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
  border-radius: 10px;
- border: 1px solid rgba(0, 0, 0, 0.1);
+ border: 2px solid rgba(0, 255, 55, 0.1) !important;
+ position: relative;
+}
+
+.list-active::after{
+  content: "";
+  width: 85px;
+  height: 43.5px;
+  background-color: white;
+  position: absolute;
+  top: -1.8px;
+  right: -25px;
 }
 
 .word-list{

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineLock } from "react-icons/md";
@@ -20,12 +21,15 @@ const NavBar = () => {
               <Link to="/admin/upload" className="ml-5">
                 Upload
               </Link>
+              <Link to="/admin/review" className="ml-5">
+                Review
+              </Link>
               <Link to="/learn" className="ml-5">
                 Learn
               </Link>
               <Link
-                to="/"
-                className="flex items-center cursor-not-allowed ml-5"
+                to=""
+                className="flex items-center cursor-not-allowed ml-5 pointer-events-none"
               >
                 <MdOutlineLock />
                 <p className="ml-1">contest</p>

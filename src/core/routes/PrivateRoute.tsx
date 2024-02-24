@@ -4,19 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/context";
 
 export const PrivateRoute = ({ userRole, children }: any) => {
-
-  const globalContex:any = useContext(GlobalContext); 
+  const globalContext: any = useContext(GlobalContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userRole !== "Admin") {
-     globalContex.setShowLogin(false)
-     globalContex.setShowSignup(false)
+    if (userRole !== "Admin" || !globalContext.isLoggedIn) {
+      globalContext.setShowLogin(false);
+      globalContext.setShowSignup(false);
 
       navigate("/");
     }
-  }, [userRole, navigate]);
+  }, [userRole, globalContext.isLoggedIn, navigate]);
 
-
-  return userRole === "Admin" ? <>{children}</> : null;
+  return userRole === "Admin" && globalContext.isLoggedIn ? <>{children}</> : null;
 };
